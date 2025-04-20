@@ -24,14 +24,14 @@ const (
 )
 
 var (
-	debugActivated bool = false
-	debugFile      *os.File
-	debugLogger    *log.Logger
+	debugEnabled bool = false
+	debugFile    *os.File
+	debugLogger  *log.Logger
 )
 
 // Initialise debug and open debug file to write debug information to it
 func Start() {
-	if debugActivated {
+	if debugEnabled {
 		return
 	}
 
@@ -49,7 +49,7 @@ func Start() {
 	fmt.Printf("[%s]: debug info will be saved to %s\n", infoStr, fileStr)
 
 	debugLogger = log.New(debugFile, "", log.LstdFlags)
-	debugActivated = true
+	debugEnabled = true
 
 	debugLogger.Printf("--- Begin --- \n\n")
 }
@@ -61,13 +61,13 @@ func Stop() {
 		debugLogger.Printf("--- End --- \n\n")
 		debugFile.Close()
 	}
-	debugActivated = false
+	debugEnabled = false
 }
 
 // Core debug function
 // Writes to the debugFile with a coloured message and a timestamp
 func doLog(debugLevel string, colour string, msg string) {
-	if !debugActivated {
+	if !debugEnabled {
 		return
 	}
 
