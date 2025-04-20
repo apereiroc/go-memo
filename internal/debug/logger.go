@@ -51,14 +51,14 @@ func Start() {
 	debugLogger = log.New(debugFile, "", log.LstdFlags)
 	debugEnabled = true
 
-	debugLogger.Printf("--- Begin --- \n\n")
+	debugLogger.Printf("--- Begin ---\n\n")
 }
 
 // Close debug file and set debug flag to false
 func Stop() {
 	if debugFile != nil {
 		debugLogger.SetPrefix("\n")
-		debugLogger.Printf("--- End --- \n\n")
+		debugLogger.Printf("--- End ---\n\n")
 		debugFile.Close()
 	}
 	debugEnabled = false
