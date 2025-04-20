@@ -1,5 +1,36 @@
 package app
 
+import (
+	"fmt"
+
+	"github.com/apereiroc/memogo/internal/debug"
+)
+
+// define enumerated views
+type currentView uint8
+
+const (
+	groupView currentView = iota
+	commandView
+)
+
+func renderCommandView(m *model) string {
+	return "hello from command view"
+}
+
+func renderGroupView(m *model) string {
+	return "hello from group view"
+}
+
 func (m model) View() string {
-	return "hello world!"
+	switch m.view {
+	case commandView:
+		return renderCommandView(&m)
+	case groupView:
+		return renderGroupView(&m)
+	default:
+		err := fmt.Errorf("unknown view: %d", m.view)
+		debug.Error(err)
+		panic(err)
+	}
 }
