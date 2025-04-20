@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"os"
 
+	debug "github.com/apereiroc/memogo/internal/debug"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -29,18 +29,13 @@ func (m model) View() string {
 }
 
 func main() {
-	// log to file
-	// useful because the TUI is blocking the terminal
-	f, err := tea.LogToFile("debug.log", "debug")
-	if err != nil {
-		log.Fatalf("error: %v\n", err)
-		os.Exit(1)
-	}
-	defer f.Close()
+	debug.Start()
+	defer debug.Stop()
 
 	// start program
 	p := tea.NewProgram(model{})
 	if _, err := p.Run(); err != nil {
+		debug.Error(err)
 		log.Fatal(err)
 	}
 }
