@@ -1,6 +1,11 @@
 package app
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"fmt"
+
+	"github.com/apereiroc/memogo/internal/debug"
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 // basic element of the application
 // stores a command and a description of what it does
@@ -23,7 +28,9 @@ type group struct {
 // - Update(tea.Msg) (tea.Model, tea.Cmd)
 // - View() string
 type model struct {
-	groups []group
+	groups []group     // collection of group structures
+	view   currentView // screen to be displayed in View()
+	keys   keyMap      // keys
 }
 
 // required by bubbletea
@@ -37,7 +44,7 @@ func (m model) Init() tea.Cmd {
 // this function will be called in main.go when creating the program
 // it just needs to provide the initial state
 func InitialModel() model {
-	return model{
+	m := model{
 		groups: []group{
 			{
 				name: "C/C++",
@@ -66,5 +73,10 @@ func InitialModel() model {
 				},
 			},
 		},
+		view: groupView,
+		keys: keys,
 	}
+
+	debug.Debug(fmt.Sprintf("initial model: %+v", m))
+	return m
 }
