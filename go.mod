@@ -1,4 +1,4 @@
-module github.com/apereiroc/memogo
+module github.com/apereiroc/go-memo
 
 go 1.24.2
 

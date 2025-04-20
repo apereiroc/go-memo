@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/apereiroc/memogo/internal/app"
-	"github.com/apereiroc/memogo/internal/debug"
+	"github.com/apereiroc/go-memo/internal/app"
+	"github.com/apereiroc/go-memo/internal/debug"
 	tea "github.com/charmbracelet/bubbletea"
 )
 

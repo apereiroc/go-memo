@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-const debugFileName = "memogo-debug.log"
+const debugFileName = "go-memo-debug.log"
 
 // colour codes
 const (

@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/apereiroc/memogo/internal/debug"
+	"github.com/apereiroc/go-memo/internal/debug"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
