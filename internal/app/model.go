@@ -22,7 +22,7 @@ type group struct {
 }
 
 // Index to move through a group or command
-type Index uint32
+type index uint32
 
 // tea.Model is the main element of bubbletea
 // its purpose is to hold the application's state
@@ -34,8 +34,8 @@ type model struct {
 	groups        []group     // collection of group structures
 	view          currentView // screen to be displayed in View()
 	keys          keyMap      // keys
-	selectedGroup Index       // index pointing to the current group
-	selectedCmd   Index       // index pointing to the current command
+	selectedGroup index       // index pointing to the current group
+	selectedCmd   index       // index pointing to the current command
 }
 
 // required by bubbletea
@@ -103,13 +103,13 @@ func (m *model) next() {
 	case groupView:
 		// we're viewing the groups
 		// need to access to the maximum number of groups
-		maxGroups := Index(len(m.groups))
+		maxGroups := index(len(m.groups))
 		// go forward until the end, and go to the beginning if the length is exceeded
 		m.selectedGroup = (m.selectedGroup + 1) % maxGroups
 	case commandView:
 		// we're viewing the commands
 		// need to access the number of commands for the current group
-		maxCmds := Index(len(m.groups[m.selectedGroup].cmds))
+		maxCmds := index(len(m.groups[m.selectedGroup].cmds))
 		// go forward until the end, and go to the beginning if the length is exceeded
 		m.selectedCmd = (m.selectedCmd + 1) % maxCmds
 	}
@@ -123,7 +123,7 @@ func (m *model) prev() {
 		switch m.selectedGroup {
 		case 0:
 			// go to the end if user selects previous than 0
-			maxGroups := Index(len(m.groups))
+			maxGroups := index(len(m.groups))
 			m.selectedGroup = maxGroups - 1
 		default:
 			m.selectedGroup--
@@ -133,7 +133,7 @@ func (m *model) prev() {
 		switch m.selectedCmd {
 		case 0:
 			// go to the end if user selects previous than 0
-			maxCmds := Index(len(m.groups[m.selectedGroup].cmds))
+			maxCmds := index(len(m.groups[m.selectedGroup].cmds))
 			m.selectedCmd = maxCmds - 1
 		default:
 			m.selectedCmd--
