@@ -59,7 +59,9 @@ func Stop() {
 	if debugFile != nil {
 		debugLogger.SetPrefix("\n")
 		debugLogger.Printf("--- End ---\n\n")
-		debugFile.Close()
+		if err := debugFile.Close(); err != nil {
+			log.Fatal(err)
+		}
 	}
 	debugEnabled = false
 }
