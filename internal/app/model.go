@@ -21,6 +21,9 @@ type group struct {
 	cmds []command // vector of commands
 }
 
+// Index to move through a group or command
+type Index uint32
+
 // tea.Model is the main element of bubbletea
 // its purpose is to hold the application's state
 // three methods must be defined
@@ -28,9 +31,11 @@ type group struct {
 // - Update(tea.Msg) (tea.Model, tea.Cmd)
 // - View() string
 type model struct {
-	groups []group     // collection of group structures
-	view   currentView // screen to be displayed in View()
-	keys   keyMap      // keys
+	groups        []group     // collection of group structures
+	view          currentView // screen to be displayed in View()
+	keys          keyMap      // keys
+	selectedGroup Index       // index pointing to the current group
+	selectedCmd   Index       // index pointing to the current command
 }
 
 // required by bubbletea
@@ -82,10 +87,56 @@ func InitialModel() model {
 				},
 			},
 		},
-		view: groupView,
-		keys: keys,
+		view:          groupView,
+		keys:          keys,
+		selectedGroup: 0,
+		selectedCmd:   0,
 	}
 
 	debug.Debug(fmt.Sprintf("initial model: %+v", m))
 	return m
+}
+
+// Handle next entry based on current view
+func (m *model) next() {
+	switch m.view {
+	case groupView:
+		// we're viewing the groups
+		// need to access to the maximum number of groups
+		maxGroups := Index(len(m.groups))
+		// go forward until the end, and go to the beginning if the length is exceeded
+		m.selectedGroup = (m.selectedGroup + 1) % maxGroups
+	case commandView:
+		// we're viewing the commands
+		// need to access the number of commands for the current group
+		maxCmds := Index(len(m.groups[m.selectedGroup].cmds))
+		// go forward until the end, and go to the beginning if the length is exceeded
+		m.selectedCmd = (m.selectedCmd + 1) % maxCmds
+	}
+}
+
+// Handle previous entry based on current view
+func (m *model) prev() {
+	switch m.view {
+	case groupView:
+		// we're viewing the groups
+		switch m.selectedGroup {
+		case 0:
+			// go to the end if user selects previous than 0
+			maxGroups := Index(len(m.groups))
+			m.selectedGroup = maxGroups - 1
+		default:
+			m.selectedGroup--
+		}
+	case commandView:
+		// we're viewing the commands
+		switch m.selectedCmd {
+		case 0:
+			// go to the end if user selects previous than 0
+			maxCmds := Index(len(m.groups[m.selectedGroup].cmds))
+			m.selectedCmd = maxCmds - 1
+		default:
+			m.selectedCmd--
+		}
+	}
 }

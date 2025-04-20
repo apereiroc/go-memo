@@ -14,12 +14,32 @@ const (
 	commandView
 )
 
-func renderCommandView(m *model) string {
-	return "hello from command view"
+func renderGroupView(m *model) string {
+	s := "choose a group\n\n"
+
+	for idx, group := range m.groups {
+		cursor := ""
+		if Index(idx) == m.selectedGroup {
+			cursor = ">"
+		}
+		s += fmt.Sprintf("%s %s\n", cursor, group.name)
+	}
+
+	return s
 }
 
-func renderGroupView(m *model) string {
-	return "hello from group view"
+func renderCommandView(m *model) string {
+	s := "choose a command\n\n"
+
+	for idx, cmd := range m.groups[m.selectedGroup].cmds {
+		cursor := ""
+		if Index(idx) == m.selectedCmd {
+			cursor = ">"
+		}
+		s += fmt.Sprintf("%s %s\n", cursor, cmd.cmd)
+	}
+
+	return s
 }
 
 func (m model) View() string {
