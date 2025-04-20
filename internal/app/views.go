@@ -19,7 +19,7 @@ func renderGroupView(m *model) string {
 
 	for idx, group := range m.groups {
 		cursor := ""
-		if Index(idx) == m.selectedGroup {
+		if index(idx) == m.selectedGroup {
 			cursor = ">"
 		}
 		s += fmt.Sprintf("%s %s\n", cursor, group.name)
@@ -33,7 +33,7 @@ func renderCommandView(m *model) string {
 
 	for idx, cmd := range m.groups[m.selectedGroup].cmds {
 		cursor := ""
-		if Index(idx) == m.selectedCmd {
+		if index(idx) == m.selectedCmd {
 			cursor = ">"
 		}
 		s += fmt.Sprintf("%s %s\n", cursor, cmd.cmd)
