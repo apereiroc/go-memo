@@ -72,6 +72,15 @@ func InitialModel() model {
 					},
 				},
 			},
+			{
+				name: "Go",
+				cmds: []command{
+					{
+						cmd:         "find . -type f -name '*.go' -exec sed -i '' 's/OLDNAME/NEWNAME/g' {} +",
+						description: "Rename a go module from `OLDNAME` to `NEWNAME`",
+					},
+				},
+			},
 		},
 		view: groupView,
 		keys: keys,
