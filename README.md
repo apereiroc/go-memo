@@ -2,7 +2,10 @@
 
 Simple terminal UI app to store and recall frequently used commands, grouped by context
 
-Commands can be quickly browsed and copied to the clipboard.
+Commands can be quickly browsed and copied to the clipboard
+
+![](img/demo.gif)
+
 
 ## Build and run
 
@@ -13,4 +16,12 @@ go build -o memo
 ./memo
 ```
 
-For now, debug information is written to `$TMPDIR/go-memo-debug.log`.
+## For dev
+
+Debug information can be written to `$TMPDIR/go-memo-debug.log` by uncommenting these lines in `main.go`
+
+```go
+	debug.Start()
+	defer debug.Stop()
+```
+
