@@ -15,7 +15,7 @@ func main() {
 	// defer debug.Stop()
 
 	// start program
-	p := tea.NewProgram(app.InitialModel())
+	p := tea.NewProgram(app.NewModel())
 	if _, err := p.Run(); err != nil {
 		debug.Error(err)
 		log.Fatal(err)

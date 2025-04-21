@@ -7,7 +7,7 @@ import (
 )
 
 func TestModel_CreateInitialModel(t *testing.T) {
-	m := InitialModel()
+	m := NewModel()
 	assert.True(t, len(m.groups) > 0)
 
 	for _, g := range m.groups {

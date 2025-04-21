@@ -50,7 +50,7 @@ func (m model) Init() tea.Cmd {
 // model's creation
 // this function will be called in main.go when creating the program
 // it just needs to provide the initial state
-func InitialModel() model {
+func NewModel() model {
 	m := model{
 		groups: []group{
 			{
