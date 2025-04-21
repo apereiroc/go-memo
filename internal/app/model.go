@@ -2,10 +2,13 @@ package app
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/apereiroc/go-memo/internal/debug"
 	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
+	clipboard "github.com/tiagomelo/go-clipboard/clipboard"
 )
 
 // basic element of the application
@@ -38,6 +41,7 @@ type model struct {
 	selectedCmd   index       // index pointing to the current command
 	keys          keyMap      // keys
 	help          help.Model  // help
+	quitWithCmd   bool        // whether the user closes the app by selecting a command
 }
 
 // required by bubbletea
@@ -94,6 +98,7 @@ func NewModel() model {
 		selectedCmd:   0,
 		keys:          groupKeys,
 		help:          help.New(),
+		quitWithCmd:   false,
 	}
 
 	// customize help
@@ -144,6 +149,28 @@ func (m *model) prev() {
 			m.selectedCmd = maxCmds - 1
 		default:
 			m.selectedCmd--
+		}
+	}
+}
+
+// core function of the app
+// if the model returned is correct and the quitting flag is set
+// the selected command will be copied to the clipboard
+func Success(progResult tea.Model) {
+	// Type assertion here
+	m, ok := progResult.(model)
+	if !ok {
+		log.Fatal("program result was not of type app.model")
+	}
+
+	if m.quitWithCmd {
+		// successful exit
+		// user selected a command
+		c := clipboard.New()
+		cmd := m.groups[m.selectedGroup].cmds[m.selectedCmd].cmd
+		if err := c.CopyText(cmd); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
 		}
 	}
 }

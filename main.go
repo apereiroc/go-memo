@@ -16,8 +16,10 @@ func main() {
 
 	// start program
 	p := tea.NewProgram(app.NewModel())
-	if _, err := p.Run(); err != nil {
+	if m, err := p.Run(); err != nil {
 		debug.Error(err)
 		log.Fatal(err)
+	} else {
+		app.Success(m)
 	}
 }

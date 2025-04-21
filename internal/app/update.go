@@ -33,6 +33,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.keys = commandKeys
 				// restart the pointer to command
 				m.selectedCmd = 0
+			case commandView:
+				// exit and copy the selected command to the clipboard
+				m.quitWithCmd = true
+				return m, tea.Quit
 			}
 		case key.Matches(msg, m.keys.Esc):
 			// The user pressed esc
