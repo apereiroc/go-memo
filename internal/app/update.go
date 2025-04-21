@@ -25,6 +25,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch m.view {
 			case groupView:
 				m.view = commandView
+				// restart the pointer to command
+				m.selectedCmd = 0
 			}
 		case key.Matches(msg, m.keys.Esc):
 			// The user pressed esc
