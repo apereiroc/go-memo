@@ -20,6 +20,9 @@ func TestModel_CreateInitialModel(t *testing.T) {
 
 	assert.Equal(t, m.selectedGroup, index(0))
 	assert.Equal(t, m.selectedCmd, index(0))
+	assert.Equal(t, m.view, groupView)
+	assert.Equal(t, m.keys, groupKeys)
+	assert.Equal(t, m.quitWithCmd, false)
 }
 
 func TestModel_NextPrevInGroupView(t *testing.T) {
