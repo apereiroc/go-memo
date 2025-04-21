@@ -26,7 +26,7 @@ func TestModel_NextPrevInGroupView(t *testing.T) {
 	// create a simple model
 	m := model{
 		view:          groupView,
-		keys:          keys,
+		keys:          groupKeys,
 		selectedGroup: 0,
 		selectedCmd:   0,
 	}
