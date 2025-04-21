@@ -11,8 +11,8 @@ import (
 func main() {
 	// comment these two lines for production
 	// will early return and do nothing
-	debug.Start()
-	defer debug.Stop()
+	// debug.Start()
+	// defer debug.Stop()
 
 	// start program
 	p := tea.NewProgram(app.InitialModel())

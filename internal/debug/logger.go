@@ -46,7 +46,7 @@ func Start() {
 
 	infoStr := colourGreen + "INFO" + colourReset
 	fileStr := colourYellow + debugFullFileName + colourReset
-	fmt.Printf("[%s]: debug info will be saved to %s\n", infoStr, fileStr)
+	fmt.Printf("[%s]: debug info will be saved to %s\n\n", infoStr, fileStr)
 
 	debugLogger = log.New(debugFile, "", log.LstdFlags)
 	debugEnabled = true
