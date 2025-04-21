@@ -18,10 +18,17 @@ go build -o memo
 
 ## For dev
 
+Run unit tests with
+
+```bash
+go test -v ./...
+```
+
+Additionally, this project has a small and colourful debug package. Printing to stdout is not a good idea, since it is blocked by the TUI.
 Debug information can be written to `$TMPDIR/go-memo-debug.log` by uncommenting these lines in `main.go`
 
 ```go
-	debug.Start()
-	defer debug.Stop()
+  debug.Start()
+  defer debug.Stop()
 ```
 
