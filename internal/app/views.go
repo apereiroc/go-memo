@@ -85,6 +85,9 @@ func renderCommandView(m *model) string {
 }
 
 func (m model) View() string {
+	if m.quitWithCmd {
+		return ""
+	}
 	switch m.view {
 	case commandView:
 		return renderCommandView(&m)
