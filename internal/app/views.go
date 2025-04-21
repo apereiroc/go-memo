@@ -40,35 +40,46 @@ func renderGroupView(m *model) string {
 
 	s2 = previewBoxStyle.Render(s2)
 
-	s := lipgloss.JoinHorizontal(lipgloss.Top, s1, s2)
+	s := lipgloss.JoinHorizontal(lipgloss.Top, s1, s2) + "\n"
+
+	// print help
+	s += helpBoxStyle.Render(m.help.View(m.keys))
 
 	return s
 }
 
 func renderCommandView(m *model) string {
+	// get select group
 	g := m.groups[m.selectedGroup]
 
 	// descriptions
+	// s1 is the text that will be printed to descBoxStyle
 	s1 := headerStyle.Render("Description") + "\n\n"
 
 	// commands
-	s2 := headerStyle.Render("Browsing commands for ")
-	s2 += selectedGroupStyle.Render(g.name) + "\n\n"
-	// s2 += headerStyle.Render(". Choose a command:") + "\n\n"
+	// s2 is the text that will be printed to commandBoxStyle
+	s2 := headerStyle.Render("Browsing commands for ") +
+		selectedGroupStyle.Render(g.name) + "\n\n"
 
 	for idx, cmd := range g.cmds {
 		line := cmd.cmd
 		if index(idx) == m.selectedCmd {
-			line = selectedStyle.Render("> " + line)
+			// print description of the selected command
 			s1 += descriptionStyle.Render(cmd.description) + "\n"
+			// highlight command if it matches the selected command
+			line = selectedStyle.Render("> " + line)
 		}
+		// print command
 		s2 += line + "\n"
 	}
 
 	s1 = descBoxStyle.Render(s1)
 	s2 = commandBoxStyle.Render(s2)
 
-	s := lipgloss.JoinHorizontal(lipgloss.Top, s1, s2)
+	s := lipgloss.JoinHorizontal(lipgloss.Top, s1, s2) + "\n"
+
+	// print help
+	s += helpBoxStyle.Render(m.help.View(m.keys))
 
 	return s
 }

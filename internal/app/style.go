@@ -9,8 +9,11 @@ const (
 )
 
 const (
-	boxHeight = 8
-	boxWidth  = 50
+	boxHeight            = 8
+	boxWidth             = 50
+	boxPaddingVertical   = 1
+	boxPaddingHorizontal = 2
+	helpBoxWidth         = 102
 )
 
 var (
@@ -23,8 +26,7 @@ var (
 				Bold(true)
 
 	commandPreviewStyle = lipgloss.NewStyle().
-		// Foreground(lipgloss.Color(orange)).
-		Bold(true)
+				Bold(true)
 
 	descriptionStyle = lipgloss.NewStyle().
 				Foreground(lipgloss.Color(orange)).
@@ -34,11 +36,15 @@ var (
 
 	groupBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			Padding(1, 2).
+			Padding(boxPaddingVertical, boxPaddingHorizontal).
 			Width(boxWidth).
 			Height(boxHeight)
 
 	previewBoxStyle = groupBoxStyle
 	commandBoxStyle = groupBoxStyle
 	descBoxStyle    = groupBoxStyle
+	helpBoxStyle    = groupBoxStyle.UnsetHeight().
+			Width(helpBoxWidth).
+			UnsetPaddingBottom().
+			UnsetPaddingTop()
 )

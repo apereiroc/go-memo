@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/apereiroc/go-memo/internal/debug"
+	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -33,9 +34,10 @@ type index uint32
 type model struct {
 	groups        []group     // collection of group structures
 	view          currentView // screen to be displayed in View()
-	keys          keyMap      // keys
 	selectedGroup index       // index pointing to the current group
 	selectedCmd   index       // index pointing to the current command
+	keys          keyMap      // keys
+	help          help.Model  // help
 }
 
 // required by bubbletea
@@ -88,10 +90,15 @@ func InitialModel() model {
 			},
 		},
 		view:          groupView,
-		keys:          keys,
 		selectedGroup: 0,
 		selectedCmd:   0,
+		keys:          keys,
+		help:          help.New(),
 	}
+
+	// customize help
+	m.help.ShowAll = true        // show full help
+	m.help.FullSeparator = " • " // add separator
 
 	debug.Debug(fmt.Sprintf("initial model: %+v", m))
 	return m
@@ -104,13 +111,13 @@ func (m *model) next() {
 		// we're viewing the groups
 		// need to access to the maximum number of groups
 		maxGroups := index(len(m.groups))
-		// go forward until the end, and go to the beginning if the length is exceeded
+		// advance to the end, and go to the beginning if the length is exceeded
 		m.selectedGroup = (m.selectedGroup + 1) % maxGroups
 	case commandView:
 		// we're viewing the commands
 		// need to access the number of commands for the current group
 		maxCmds := index(len(m.groups[m.selectedGroup].cmds))
-		// go forward until the end, and go to the beginning if the length is exceeded
+		// advance to the end, and go to the beginning if the length is exceeded
 		m.selectedCmd = (m.selectedCmd + 1) % maxCmds
 	}
 }
@@ -122,7 +129,7 @@ func (m *model) prev() {
 		// we're viewing the groups
 		switch m.selectedGroup {
 		case 0:
-			// go to the end if user selects previous than 0
+			// go to the end if the user selects one prior to 0
 			maxGroups := index(len(m.groups))
 			m.selectedGroup = maxGroups - 1
 		default:
@@ -132,7 +139,7 @@ func (m *model) prev() {
 		// we're viewing the commands
 		switch m.selectedCmd {
 		case 0:
-			// go to the end if user selects previous than 0
+			// go to the end if the user selects one prior to 0
 			maxCmds := index(len(m.groups[m.selectedGroup].cmds))
 			m.selectedCmd = maxCmds - 1
 		default:
