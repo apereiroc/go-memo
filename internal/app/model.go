@@ -92,7 +92,7 @@ func InitialModel() model {
 		view:          groupView,
 		selectedGroup: 0,
 		selectedCmd:   0,
-		keys:          keys,
+		keys:          groupKeys,
 		help:          help.New(),
 	}
 

@@ -30,6 +30,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch m.view {
 			case groupView:
 				m.view = commandView
+				m.keys = commandKeys
 				// restart the pointer to command
 				m.selectedCmd = 0
 			}
@@ -38,6 +39,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch m.view {
 			case commandView:
 				m.view = groupView
+				m.keys = groupKeys
 			}
 		case key.Matches(msg, m.keys.Quit):
 			return m, tea.Quit
