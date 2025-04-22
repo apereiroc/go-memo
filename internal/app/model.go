@@ -35,20 +35,13 @@ type index uint32
 // - Update(tea.Msg) (tea.Model, tea.Cmd)
 // - View() string
 type model struct {
-	groups        []group     // collection of group structures
-	view          currentView // screen to be displayed in View()
-	selectedGroup index       // index pointing to the current group
-	selectedCmd   index       // index pointing to the current command
-	keys          keyMap      // keys
-	help          help.Model  // help
-	quitWithCmd   bool        // whether the user closes the app by selecting a command
-}
-
-// required by bubbletea
-// can return a Cmd that could perform some initial I/O.
-// for now, we'll just return nil, which translates to "no command."
-func (m model) Init() tea.Cmd {
-	return nil
+	groups        []group      // collection of group structures
+	view          viewStrategy // screen to be displayed in View()
+	selectedGroup index        // index pointing to the current group
+	selectedCmd   index        // index pointing to the current command
+	keys          keyMap       // keys
+	help          help.Model   // help
+	quitWithCmd   bool         // whether the user closes the app by selecting a command
 }
 
 // model's creation
@@ -92,8 +85,21 @@ func NewModel() model {
 					},
 				},
 			},
+			{
+				name: "Docker",
+				cmds: []command{
+					{
+						cmd:         "docker buildx build -f Dockerfile -t build .",
+						description: "Build image from Dockerfile with tag build. Dockerfile is at .",
+					},
+					{
+						cmd:         "docker buildx build --platform=linux/amd64 -f Dockerfile -t dotfiles-dev . && docker run --platform=linux/amd64 --rm -it dotfiles-dev",
+						description: "Build image for testing my dotfiles. Hard to remember ...",
+					},
+				},
+			},
 		},
-		view:          groupView,
+		view:          groupView{},
 		selectedGroup: 0,
 		selectedCmd:   0,
 		keys:          groupKeys,
@@ -109,49 +115,28 @@ func NewModel() model {
 	return m
 }
 
-// Handle next entry based on current view
-func (m *model) next() {
-	switch m.view {
-	case groupView:
-		// we're viewing the groups
-		// need to access to the maximum number of groups
-		maxGroups := index(len(m.groups))
-		// advance to the end, and go to the beginning if the length is exceeded
-		m.selectedGroup = (m.selectedGroup + 1) % maxGroups
-	case commandView:
-		// we're viewing the commands
-		// need to access the number of commands for the current group
-		maxCmds := index(len(m.groups[m.selectedGroup].cmds))
-		// advance to the end, and go to the beginning if the length is exceeded
-		m.selectedCmd = (m.selectedCmd + 1) % maxCmds
-	}
+// required by bubbletea
+// can return a Cmd that could perform some initial I/O.
+// for now, we'll just return nil, which translates to "no command."
+func (m model) Init() tea.Cmd {
+	return nil
 }
 
-// Handle previous entry based on current view
-func (m *model) prev() {
-	switch m.view {
-	case groupView:
-		// we're viewing the groups
-		switch m.selectedGroup {
-		case 0:
-			// go to the end if the user selects one prior to 0
-			maxGroups := index(len(m.groups))
-			m.selectedGroup = maxGroups - 1
-		default:
-			m.selectedGroup--
-		}
-	case commandView:
-		// we're viewing the commands
-		switch m.selectedCmd {
-		case 0:
-			// go to the end if the user selects one prior to 0
-			maxCmds := index(len(m.groups[m.selectedGroup].cmds))
-			m.selectedCmd = maxCmds - 1
-		default:
-			m.selectedCmd--
-		}
-	}
-}
+// // Handle next entry based on current view
+// func (m *model) next() {
+// 	switch m.view {
+// 	case groupView:
+// 	case commandView:
+// 	}
+// }
+//
+// // Handle previous entry based on current view
+// func (m *model) prev() {
+// 	switch m.view {
+// 	case groupView:
+// 	case commandView:
+// 	}
+// }
 
 // core function of the app
 // if the model returned is correct and the quitting flag is set

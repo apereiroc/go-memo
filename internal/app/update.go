@@ -1,53 +1,29 @@
 package app
 
 import (
-	"fmt"
-
-	"github.com/apereiroc/go-memo/internal/debug"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	debug.Info(fmt.Sprintf("got message: %+v", msg))
-
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		// If we set a width on the help menu it can gracefully truncate
-		// its view as needed.
 		m.help.Width = msg.Width
-
+		return m, nil
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, m.keys.Up):
-			// The user pressed up
-			m.prev()
+			return m.view.prev(m), nil
 		case key.Matches(msg, m.keys.Down):
-			// The user pressed up
-			m.next()
-		case key.Matches(msg, m.keys.Enter):
-			// The user pressed enter
-			switch m.view {
-			case groupView:
-				m.view = commandView
-				m.keys = commandKeys
-				// restart the pointer to command
-				m.selectedCmd = 0
-			case commandView:
-				// exit and copy the selected command to the clipboard
-				m.quitWithCmd = true
-				return m, tea.Quit
-			}
-		case key.Matches(msg, m.keys.Esc):
-			// The user pressed esc
-			switch m.view {
-			case commandView:
-				m.view = groupView
-				m.keys = groupKeys
-			}
+			return m.view.next(m), nil
 		case key.Matches(msg, m.keys.Quit):
 			return m, tea.Quit
 		}
 	}
-	return m, nil
+
+	// update view and model
+	newView, newModel, cmd := m.view.update(m, msg)
+	// attach the new view to the new model
+	newModel.view = newView
+	return newModel, cmd
 }

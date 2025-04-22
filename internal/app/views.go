@@ -1,101 +1,25 @@
 package app
 
 import (
-	"fmt"
-
-	"github.com/apereiroc/go-memo/internal/debug"
-	"github.com/charmbracelet/lipgloss"
+	tea "github.com/charmbracelet/bubbletea"
 )
 
-// define enumerated views
-type currentView uint8
-
-const (
-	groupView currentView = iota
-	commandView
-)
-
-func renderGroupView(m *model) string {
-	// groups
-	s1 := headerStyle.Render("Groups") + "\n\n"
-
-	for idx, group := range m.groups {
-		line := group.name
-		if index(idx) == m.selectedGroup {
-			line = selectedStyle.Render("> " + line)
-		}
-
-		s1 += line + "\n"
-	}
-
-	s1 = groupBoxStyle.Render(s1)
-
-	// preview
-	s2 := headerStyle.Render("Preview") + "\n\n"
-
-	g := m.groups[m.selectedGroup]
-	for _, cmd := range g.cmds {
-		s2 += commandPreviewStyle.Render(cmd.cmd) + "\n"
-	}
-
-	s2 = previewBoxStyle.Render(s2)
-
-	s := lipgloss.JoinHorizontal(lipgloss.Top, s1, s2) + "\n"
-
-	// print help
-	s += helpBoxStyle.Render(m.help.View(m.keys))
-
-	return s
-}
-
-func renderCommandView(m *model) string {
-	// get select group
-	g := m.groups[m.selectedGroup]
-
-	// descriptions
-	// s1 is the text that will be printed to descBoxStyle
-	s1 := headerStyle.Render("Description") + "\n\n"
-
-	// commands
-	// s2 is the text that will be printed to commandBoxStyle
-	s2 := headerStyle.Render("Browsing commands for ") +
-		selectedGroupStyle.Render(g.name) + "\n\n"
-
-	for idx, cmd := range g.cmds {
-		line := cmd.cmd
-		if index(idx) == m.selectedCmd {
-			// print description of the selected command
-			s1 += descriptionStyle.Render(cmd.description) + "\n"
-			// highlight command if it matches the selected command
-			line = selectedStyle.Render("> " + line)
-		}
-		// print command
-		s2 += line + "\n"
-	}
-
-	s1 = descBoxStyle.Render(s1)
-	s2 = commandBoxStyle.Render(s2)
-
-	s := lipgloss.JoinHorizontal(lipgloss.Top, s1, s2) + "\n"
-
-	// print help
-	s += helpBoxStyle.Render(m.help.View(m.keys))
-
-	return s
+// Follow strategy design pattern for scalability
+// Implement view's behaviours under model's Update/View methods for each case
+// Also need to implement how model.next()/prev() are handled (view-dependent behaviour)
+type viewStrategy interface {
+	update(m model, msg tea.Msg) (viewStrategy, model, tea.Cmd)
+	view(m model) string
+	// Handle next entry based on current view
+	next(m model) model
+	// Handle previous entry based on current view
+	prev(m model) model
 }
 
 func (m model) View() string {
+	// clean screen after exit
 	if m.quitWithCmd {
 		return ""
 	}
-	switch m.view {
-	case commandView:
-		return renderCommandView(&m)
-	case groupView:
-		return renderGroupView(&m)
-	default:
-		err := fmt.Errorf("unknown view: %d", m.view)
-		debug.Error(err)
-		panic(err)
-	}
+	return m.view.view(m)
 }
