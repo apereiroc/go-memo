@@ -41,7 +41,8 @@ type model struct {
 	selectedCmd   index        // index pointing to the current command
 	keys          keyMap       // keys
 	help          help.Model   // help
-	quitWithCmd   bool         // whether the user closes the app by selecting a command
+	quitWithCmd   bool         // whether the user closes the app (successfully selecting a command)
+	quit          bool         // whether the user closes the app (abnormally)
 }
 
 // model's creation
@@ -105,6 +106,7 @@ func NewModel() model {
 		keys:          groupKeys,
 		help:          help.New(),
 		quitWithCmd:   false,
+		quit:          false,
 	}
 
 	// customize help

@@ -17,6 +17,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, m.keys.Down):
 			return m.view.next(m), nil
 		case key.Matches(msg, m.keys.Quit):
+			m.quit = true
 			return m, tea.Quit
 		}
 	}

@@ -18,7 +18,7 @@ type viewStrategy interface {
 
 func (m model) View() string {
 	// clean screen after exit
-	if m.quitWithCmd {
+	if m.quitWithCmd || m.quit {
 		return ""
 	}
 	return m.view.view(m)

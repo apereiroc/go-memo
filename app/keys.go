@@ -29,8 +29,8 @@ var groupKeys = keyMap{
 		key.WithHelp("enter", "go selected"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("q"),
-		key.WithHelp("q", "quit"),
+		key.WithKeys("q", "ctrl+c"),
+		key.WithHelp("q/ctrl+c", "quit"),
 	),
 }
 
@@ -53,7 +53,7 @@ var commandKeys = keyMap{
 		key.WithHelp("esc", "go back"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("q"),
-		key.WithHelp("q", "quit"),
+		key.WithKeys("q", "ctrl+c"),
+		key.WithHelp("q/ctrl+c", "quit"),
 	),
 }
