@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/apereiroc/go-memo/internal/debug"
+	"github.com/apereiroc/go-memo/debug"
 	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 	clipboard "github.com/tiagomelo/go-clipboard/clipboard"
