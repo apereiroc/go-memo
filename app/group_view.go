@@ -31,8 +31,13 @@ func (v groupView) view(m model) string {
 	// groups
 	s1 := headerStyle.Render("Groups") + "\n\n"
 
+	// TODO: remove this
+	if len(m.groups) == 0 {
+		return emptyDatabase
+	}
+
 	for idx, group := range m.groups {
-		line := group.name
+		line := group.Name
 		if index(idx) == m.selectedGroup {
 			line = selectedStyle.Render("> " + line)
 		}
@@ -46,8 +51,8 @@ func (v groupView) view(m model) string {
 	s2 := headerStyle.Render("Preview") + "\n\n"
 
 	g := m.groups[m.selectedGroup]
-	for _, cmd := range g.cmds {
-		s2 += commandPreviewStyle.Render(cmd.cmd) + "\n"
+	for _, cmd := range g.Cmds {
+		s2 += commandPreviewStyle.Render(cmd.Cmd) + "\n"
 	}
 
 	s2 = previewBoxStyle.Render(s2)

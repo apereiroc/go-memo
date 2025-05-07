@@ -42,13 +42,13 @@ func (v commandView) view(m model) string {
 	// commands
 	// s2 is the text that will be printed to commandBoxStyle
 	s2 := headerStyle.Render("Browsing commands for ") +
-		selectedGroupStyle.Render(g.name) + "\n\n"
+		selectedGroupStyle.Render(g.Name) + "\n\n"
 
-	for idx, cmd := range g.cmds {
-		line := cmd.cmd
+	for idx, cmd := range g.Cmds {
+		line := cmd.Cmd
 		if index(idx) == m.selectedCmd {
 			// print description of the selected command
-			s1 += descriptionStyle.Render(cmd.description) + "\n"
+			s1 += descriptionStyle.Render(cmd.Description) + "\n"
 			// highlight command if it matches the selected command
 			line = selectedStyle.Render("> " + line)
 		}
@@ -70,7 +70,7 @@ func (v commandView) view(m model) string {
 func (v commandView) next(m model) model {
 	// we're viewing the commands
 	// need to access the number of commands for the current group
-	maxCmds := index(len(m.groups[m.selectedGroup].cmds))
+	maxCmds := index(len(m.groups[m.selectedGroup].Cmds))
 	// advance to the end, and go to the beginning if the length is exceeded
 	m.selectedCmd = (m.selectedCmd + 1) % maxCmds
 
@@ -82,7 +82,7 @@ func (v commandView) prev(m model) model {
 	switch m.selectedCmd {
 	case 0:
 		// go to the end if the user selects one prior to 0
-		maxCmds := index(len(m.groups[m.selectedGroup].cmds))
+		maxCmds := index(len(m.groups[m.selectedGroup].Cmds))
 		m.selectedCmd = maxCmds - 1
 	default:
 		m.selectedCmd--

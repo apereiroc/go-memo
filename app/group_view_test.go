@@ -3,6 +3,7 @@ package app
 import (
 	"testing"
 
+	"github.com/apereiroc/go-memo/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +18,7 @@ func TestGroupView_NextPrevInGroupView(t *testing.T) {
 
 	// create and append 10 groups
 	for range 10 {
-		g := group{}
+		g := models.Group{}
 		m.groups = append(m.groups, g)
 	}
 
