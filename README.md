@@ -15,6 +15,17 @@ This project follows the **Elm architecture**: a **model** contains the applicat
 
 TODO: database
 
+## Get started
+
+First off, you'll need to create a database containing groups of commands. The easiest way to get started is to create one from the SQL instructions in `examples/basic.sql`.
+
+`go-memo` works with **SQLite** and looks for databases in `$HOME/.config/memo/commands.db`
+
+```bash
+mkdir -p $HOME/.config/memo
+sqlite3 $HOME/.config/memo/commands.db < examples/basic.sql
+```
+
 ## Build and run
 
 Give it a try with
