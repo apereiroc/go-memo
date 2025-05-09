@@ -19,8 +19,25 @@ const (
 	colourBlue = "\033[38;2;163;228;229m"
 	// hex colour #FF9E3B: RGB(255, 211, 60)
 	colourYellow = "\033[38;2;255;211;60m"
+	// RGB(243, 160, 132)
+	colourOrange = "\033[38;2;243;160;132m"
+	// RGB(130, 149, 205)
+	colourViolet = "\033[38;2;130;149;205m"
 	// reset
 	colourReset = "\033[0m"
+)
+
+// format
+const (
+	textBold = "\033[1m"
+)
+
+const (
+	colourDebug     = colourBlue
+	colourInfo      = colourGreen
+	colourWarn      = colourYellow
+	colourError     = colourRed
+	colourDebugInfo = colourViolet
 )
 
 var (
@@ -44,7 +61,7 @@ func Start() {
 		return
 	}
 
-	infoStr := colourGreen + "INFO" + colourReset
+	infoStr := colourInfo + "INFO" + colourReset
 	fileStr := colourYellow + debugFullFileName + colourReset
 	fmt.Printf("[%s]: debug info will be saved to %s\n\n", infoStr, fileStr)
 
@@ -73,6 +90,16 @@ func doLog(debugLevel string, colour string, msg string) {
 		return
 	}
 
+	// write useful information
+	// file name, line number, function name
+	fileName, lineNumber, functionName := trace()
+	fileName = textBold + colourDebugInfo + fileName + colourReset
+	lineString := textBold + colourDebugInfo + fmt.Sprintf("%d", lineNumber) + colourReset
+	functionName = textBold + colourDebugInfo + functionName + colourReset
+	prettyDebugInformation := fmt.Sprintf("%s:%s at function %s", fileName, lineString, functionName)
+	debugLogger.SetPrefix("")
+	debugLogger.Println(prettyDebugInformation)
+
 	// set coloured debugLevel
 	colouredLevel := colour + debugLevel + colourReset
 	debugLogger.SetPrefix(fmt.Sprintf("[%s] ", colouredLevel))
@@ -83,17 +110,32 @@ func doLog(debugLevel string, colour string, msg string) {
 }
 
 func Info(msg string) {
-	doLog("INFO", colourGreen, msg)
+	doLog("INFO", colourInfo, msg)
+}
+
+func Infof(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	Info(msg)
 }
 
 func Debug(msg string) {
-	doLog("DEBUG", colourBlue, msg)
+	doLog("DEBUG", colourDebug, msg)
+}
+
+func Debugf(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	Debug(msg)
 }
 
 func Warn(msg string) {
-	doLog("WARN", colourYellow, msg)
+	doLog("WARN", colourWarn, msg)
+}
+
+func Warnf(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	Warn(msg)
 }
 
 func Error(err error) {
-	doLog("ERROR", colourRed, err.Error())
+	doLog("ERROR", colourError, err.Error())
 }
