@@ -31,11 +31,6 @@ func (v groupView) view(m model) string {
 	// groups
 	s1 := headerStyle.Render("Groups") + "\n\n"
 
-	// TODO: remove this
-	if len(m.groups) == 0 {
-		return emptyDatabase
-	}
-
 	for idx, group := range m.groups {
 		line := group.Name
 		if index(idx) == m.selectedGroup {
