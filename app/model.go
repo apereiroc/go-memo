@@ -42,9 +42,9 @@ func NewModel(db *sql.DB) (model, error) {
 	if err != nil {
 		return model{}, err
 	}
+
 	m := model{
 		groups:        groups,
-		view:          groupView{},
 		selectedGroup: 0,
 		selectedCmd:   0,
 		keys:          groupKeys,
@@ -53,11 +53,18 @@ func NewModel(db *sql.DB) (model, error) {
 		quit:          false,
 	}
 
+	// select initial view
+	if len(groups) == 0 {
+		m.view = noDatabaseView{}
+	} else {
+		m.view = groupView{}
+	}
+
 	// customize help
 	m.help.ShowAll = true        // show full help
 	m.help.FullSeparator = " • " // add separator
 
-	debug.Debug(fmt.Sprintf("initial model: %+v", m))
+	debug.Debugf("initial model: %+v", m)
 	return m, nil
 }
 
@@ -68,22 +75,6 @@ func (m model) Init() tea.Cmd {
 	return nil
 }
 
-// // Handle next entry based on current view
-// func (m *model) next() {
-// 	switch m.view {
-// 	case groupView:
-// 	case commandView:
-// 	}
-// }
-//
-// // Handle previous entry based on current view
-// func (m *model) prev() {
-// 	switch m.view {
-// 	case groupView:
-// 	case commandView:
-// 	}
-// }
-
 // core function of the app
 // if the model returned is correct and the quitting flag is set
 // the selected command will be copied to the clipboard
@@ -91,7 +82,7 @@ func Success(progResult tea.Model) {
 	// Type assertion here
 	m, ok := progResult.(model)
 	if !ok {
-		log.Fatal("program result was not of type app.model")
+		log.Panic("program result was not of type app.model")
 	}
 
 	if m.quitWithCmd {
