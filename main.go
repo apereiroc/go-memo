@@ -17,7 +17,6 @@ func main() {
 
 	db, err := database.InitDB()
 	if err != nil {
-		debug.Error(err)
 		log.Panic(err)
 	}
 	defer db.Close()
@@ -25,7 +24,6 @@ func main() {
 	// start program
 	model, err := app.NewModel(db)
 	if err != nil {
-		debug.Error(err)
 		log.Panic(err)
 	}
 
