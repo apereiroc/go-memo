@@ -73,6 +73,10 @@ func openDB(path string) (*sql.DB, error) {
 }
 
 func isEmpty(db *sql.DB) (bool, error) {
+	if db == nil {
+		return true, nil
+	}
+
 	// adapted from https://stackoverflow.com/questions/44098235/how-could-i-check-does-my-sqlite3-database-is-empty
 	sqlStatement := `
 	SELECT
