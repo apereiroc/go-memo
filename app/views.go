@@ -8,15 +8,15 @@ import (
 // Implement view's behaviours under model's Update/View methods for each case
 // Also need to implement how model.next()/prev() are handled (view-dependent behaviour)
 type viewStrategy interface {
-	update(m model, msg tea.Msg) (viewStrategy, model, tea.Cmd)
-	view(m model) string
+	update(m *model, msg tea.Msg) (viewStrategy, *model, tea.Cmd)
+	view(m *model) string
 	// Handle next entry based on current view
-	next(m model) model
+	next(m *model) *model
 	// Handle previous entry based on current view
-	prev(m model) model
+	prev(m *model) *model
 }
 
-func (m model) View() string {
+func (m *model) View() string {
 	// clean screen after exit
 	if m.quitWithCmd || m.quit {
 		return ""

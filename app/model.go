@@ -37,13 +37,13 @@ type model struct {
 // model's creation
 // this function will be called in main.go when creating the program
 // it just needs to provide the initial state
-func NewModel(db *sql.DB) (model, error) {
+func NewModel(db *sql.DB) (*model, error) {
 	groups, err := database.LoadGroups(db)
 	if err != nil {
-		return model{}, err
+		return &model{}, err
 	}
 
-	m := model{
+	m := &model{
 		groups:        groups,
 		selectedGroup: 0,
 		selectedCmd:   0,
@@ -71,7 +71,7 @@ func NewModel(db *sql.DB) (model, error) {
 // required by bubbletea
 // can return a Cmd that could perform some initial I/O.
 // for now, we'll just return nil, which translates to "no command."
-func (m model) Init() tea.Cmd {
+func (m *model) Init() tea.Cmd {
 	return nil
 }
 
@@ -80,7 +80,7 @@ func (m model) Init() tea.Cmd {
 // the selected command will be copied to the clipboard
 func Success(progResult tea.Model) {
 	// Type assertion here
-	m, ok := progResult.(model)
+	m, ok := progResult.(*model)
 	if !ok {
 		log.Panic("program result was not of type app.model")
 	}
