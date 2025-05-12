@@ -11,7 +11,7 @@ type (
 	commandView struct{}
 )
 
-func (v commandView) update(m model, msg tea.Msg) (viewStrategy, model, tea.Cmd) {
+func (v commandView) update(m *model, msg tea.Msg) (viewStrategy, *model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
@@ -31,7 +31,7 @@ func (v commandView) update(m model, msg tea.Msg) (viewStrategy, model, tea.Cmd)
 	return v, m, nil
 }
 
-func (v commandView) view(m model) string {
+func (v commandView) view(m *model) string {
 	// get select group
 	g := m.groups[m.selectedGroup]
 
@@ -67,7 +67,7 @@ func (v commandView) view(m model) string {
 	return s
 }
 
-func (v commandView) next(m model) model {
+func (v commandView) next(m *model) *model {
 	// we're viewing the commands
 	// need to access the number of commands for the current group
 	maxCmds := index(len(m.groups[m.selectedGroup].Cmds))
@@ -77,7 +77,7 @@ func (v commandView) next(m model) model {
 	return m
 }
 
-func (v commandView) prev(m model) model {
+func (v commandView) prev(m *model) *model {
 	// we're viewing the commands
 	switch m.selectedCmd {
 	case 0:

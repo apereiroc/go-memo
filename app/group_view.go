@@ -9,7 +9,7 @@ import (
 // Rendering machinery when the user is selecting a group of commands
 type groupView struct{}
 
-func (v groupView) update(m model, msg tea.Msg) (viewStrategy, model, tea.Cmd) {
+func (v groupView) update(m *model, msg tea.Msg) (viewStrategy, *model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
@@ -27,7 +27,7 @@ func (v groupView) update(m model, msg tea.Msg) (viewStrategy, model, tea.Cmd) {
 	return v, m, nil
 }
 
-func (v groupView) view(m model) string {
+func (v groupView) view(m *model) string {
 	// groups
 	s1 := headerStyle.Render("Groups") + "\n\n"
 
@@ -60,7 +60,7 @@ func (v groupView) view(m model) string {
 	return s
 }
 
-func (v groupView) next(m model) model {
+func (v groupView) next(m *model) *model {
 	// we're viewing the groups
 	// need to access to the maximum number of groups
 	maxGroups := index(len(m.groups))
@@ -70,7 +70,7 @@ func (v groupView) next(m model) model {
 	return m
 }
 
-func (v groupView) prev(m model) model {
+func (v groupView) prev(m *model) *model {
 	// we're viewing the groups
 	switch m.selectedGroup {
 	case 0:

@@ -9,7 +9,7 @@ import (
 
 func TestGroupView_NextPrevInGroupView(t *testing.T) {
 	// create a simple model
-	m := model{
+	m := &model{
 		view:          groupView{},
 		keys:          groupKeys,
 		selectedGroup: 0,
